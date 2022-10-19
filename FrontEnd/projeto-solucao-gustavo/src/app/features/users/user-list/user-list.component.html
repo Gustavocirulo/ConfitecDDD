@@ -1,0 +1,181 @@
+<div class="container" fxLayout="row" fxLayoutAlign="center none">
+
+  <div fxFlex="95%">
+
+    <mat-card>
+      <mat-card-content>
+        <h2>Users</h2>
+
+
+
+        <div class="container" fxLayout="row" fxLayoutAlign="center none">
+          <div fxFlex="90%" class="text-center no-records animate">
+
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+              <!-- Position Column -->
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef> Id </th>
+                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="nome">
+                <th mat-header-cell *matHeaderCellDef> Nome </th>
+                <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="sobrenome">
+                <th mat-header-cell *matHeaderCellDef> Sobrenome </th>
+                <td mat-cell *matCellDef="let element"> {{element.sobrenome}} </td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef> Email </th>
+                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="dataNascimento">
+                <th mat-header-cell *matHeaderCellDef> Data Nascimento </th>
+                <td mat-cell *matCellDef="let element"> {{element.dataNascimento | date : 'dd/MM/yyyy'}}</td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="escolaridade">
+                <th mat-header-cell *matHeaderCellDef> Escolaridade </th>
+                <td mat-cell *matCellDef="let element"> {{element.escolaridade}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="acao">
+                <th mat-header-cell *matHeaderCellDef width="100px"> Ações </th>
+                <td mat-cell *matCellDef="let element"> 
+                  
+                  <button type="button" mat-mini-fab color="primary" aria-label="Example icon button with a home icon" (click)="onExcluirPessoa(element)">
+                    <span class="cdk-visually-hidden">Exlcluir</span>
+                    <mat-icon class="mat-icon-rtl-mirror"  aria-hidden="false" aria-label="Example delete icon" fontIcon="delete"></mat-icon>
+                  </button>
+
+                  <button type="button" mat-mini-fab color="primary" aria-label="Example icon button with a home icon">
+                    <span class="cdk-visually-hidden">Editar</span>
+                    <mat-icon class="mat-icon-rtl-mirror"  aria-hidden="false" aria-label="Example delete icon" fontIcon="edit" (click)="onPreencherCamposEditar(element)"></mat-icon>
+                  </button>
+                  
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+              aria-label="Select page of periodic elements">
+            </mat-paginator>
+          </div>
+        </div>
+
+        <div class="container" fxLayout="row" fxLayoutAlign="center none">
+          <div fxFlex="90%" class="text-center no-records animate">
+            <mat-card>
+
+                <mat-card-subtitle *ngIf="!this.addUserForm.get('idFormControl')?.value"><b>Adicionar</b> Usuário</mat-card-subtitle>
+                <mat-card-subtitle *ngIf="this.addUserForm.get('idFormControl')?.value"><b>Editar</b> Usuário</mat-card-subtitle>
+
+                <form class="add-user-form" [formGroup]="addUserForm" (ngSubmit)="onSubmit()">
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Nome</mat-label>
+                    <input type="text" matInput formControlName="nomeFormControl" [errorStateMatcher]="matcher"
+                      placeholder="Ex. Antonio João">
+                    <mat-error *ngFor="let validation of user_validation_messages.nome">
+                      <mat-error class="error-message"
+                        *ngIf="addUserForm.get('nomeFormControl')?.hasError(validation.type) && (addUserForm.get('nomeFormControl')?.dirty || addUserForm.get('nomeFormControl')?.touched)">
+                        {{validation.message}}<b>{{validation.bold}}</b>
+                      </mat-error>
+                    </mat-error>
+                  </mat-form-field>
+
+
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Sobrenome</mat-label>
+                    <input type="nome" matInput formControlName="sobrenomeFormControl" [errorStateMatcher]="matcher"
+                      placeholder="Ex. Silva">
+                    <mat-error *ngFor="let validation of user_validation_messages.sobrenome">
+                      <mat-error class="error-message"
+                        *ngIf="addUserForm.get('sobrenomeFormControl')?.hasError(validation.type) && (addUserForm.get('sobrenomeFormControl')?.dirty || addUserForm.get('sobrenomeFormControl')?.touched)">
+                        {{validation.message}}<b>{{validation.bold}}</b>
+                      </mat-error>
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input type="email" matInput formControlName="emailFormControl" [errorStateMatcher]="matcher"
+                      placeholder="Ex. pat@example.com">
+                    <mat-error *ngFor="let validation of user_validation_messages.email">
+                      <mat-error class="error-message"
+                        *ngIf="addUserForm.get('emailFormControl')?.hasError(validation.type) && (addUserForm.get('emailFormControl')?.dirty || addUserForm.get('emailFormControl')?.touched)">
+                        {{validation.message}}<b>{{validation.bold}}</b>
+                      </mat-error>
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>Data de Nascimento</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="dataNascimentoFormControl"
+                      [max]="maxDate">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+
+                    <mat-error *ngFor="let validation of user_validation_messages.dataNascimento">
+                      <mat-error class="error-message"
+                        *ngIf="addUserForm.get('dataNascimentoFormControl')?.hasError(validation.type) && (addUserForm.get('dataNascimentoFormControl')?.dirty || addUserForm.get('dataNascimentoFormControl')?.touched)">
+                        {{validation.message}}<b>{{validation.bold}}</b>
+                      </mat-error>
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>Escolaridade</mat-label>
+                    <mat-select formControlName="escolaridadeFormControl">
+                      <mat-option *ngFor="let escolaridade of tipo_Escolaridade" [value]="escolaridade.valor">
+                        {{escolaridade.nome}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngFor="let validation of user_validation_messages.escolaridade">
+                      <mat-error class="error-message"
+                        *ngIf="addUserForm.get('escolaridadeFormControl')?.hasError(validation.type) && (addUserForm.get('escolaridadeFormControl')?.dirty || addUserForm.get('escolaridadeFormControl')?.touched)">
+                        {{validation.message}}<b>{{validation.bold}}</b>
+                      </mat-error>
+                    </mat-error>
+                  </mat-form-field>
+
+                  <!-- <button mat-mini-fab color="primary" aria-label="Botão para salvar" style="">
+                    <mat-icon>add</mat-icon>
+                  </button> -->
+
+                  <button mat-flat-button color="primary" aria-label="Botão para salvar" type="submit" >Salvar</button>
+                  <button mat-flat-button color="warn" aria-label="Botão para salvar" type="button" (click)="addUserForm.reset()">Limpar</button>
+
+                </form>
+            </mat-card>
+          </div>
+        </div>
+
+
+
+
+        <div *ngIf="dataSource == null" class="container" fxLayout="row" fxLayoutAlign="center none">
+          <div fxFlex="50%" class="text-center no-records animate">
+            <mat-icon>people_outline</mat-icon>
+            <p>No users exist.</p>
+          </div>
+          <mat-icon> </mat-icon>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

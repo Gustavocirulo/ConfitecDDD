@@ -1,0 +1,41 @@
+table {
+    width: 100%;
+  }
+
+.mat-column-nome {
+    text-align: left;
+}
+
+.mat-column-sobrenome {
+    text-align: left;
+}
+
+.mat-column-id {
+    text-align: left;
+}
+
+.mat-column-email {
+    text-align: left;
+}
+
+.mat-column-dataNascimento {
+    text-align: left;
+}
+
+.mat-column-escolaridade {
+    text-align: left;
+}
+
+form button[type=submit] {
+    height: 52px; 
+    top: -7px
+}
+
+form button[color=warn] {
+    height: 52px; 
+    top: -7px
+}
+
+table button[mat-mini-fab] {
+    margin: 0px 5px;
+}
